@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gamedev Canvas Workshop</title>
+
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { display: block; margin: 0 auto}
+    </style>
+
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col" id="col-left">
+                <h3 class='scoreboard'></h3>
+                <div class="left-half"></div>
+            </div>
+            <div class="col-9">
+                <h1 class="title">Planet Pong</h1>
+                <canvas id="myCanvas" width="550" height="420"></canvas>
+            </div>
+            <div class="col" id="col-right">
+                <h3 class='lifecount'></h3>
+                <div class="right-half"></div>
+            </div>
+        </div>
+    </div>
+
+<!-- Home Page Buttons -->
+    <div class='button-container'>
+        <button class="btn btn-primary startButton" id="start" type="submit">Start Game!</button>
+        <button class="btn btn-primary how-to-playButton" id="how-to-play" type="submit">How To Play</button>
+    </div>
+
+
+
+<!-- MODALS -->
+
+    
+<!-- How to Play Modal -->
+    <div class="modal modal1" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">How To Play</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>1. User will start game by clicking a start game button in the middle of the screen</p>
+              <p>2. Once you click start, you will have to go through three levels of Pong, each one harder than the last</p>
+              <p>3. You can move left or right with the arrow keys or with your mouse</p>
+              <p>4. Win and be champion of the universe! Lose and be disqualified!</p>
+              <p class="motivation">Show Us What You Got!!!!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Close</button>
+              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+<!-- You Lose Modal -->
+      <div class="modal youLoseModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">You Lose!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <img class='you-lose' src='images/Disqualified.jpg'>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary reloadPage">Reload</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+<!-- You Win Modal -->
+<div class="modal youWinModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Congratulations!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <img class='you-win' src='images/I-Like-What-You-Got.gif'>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary reloadPage">Reload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+<!-- Group Stage Congratulations Modal -->
+<div class="modal level-1" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">You Got Passed the Group Stage! Get Ready for the Semifinals!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <img class='level-1' src='images/Get-Schwifty1.gif'>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+<!-- SemiFinal Congratulations Modal -->
+<div class="modal level-2" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">You Got Passed the Semifinals! Get Ready for the Finals!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <img class='level-2' src='images/Get-Schwifty2.gif'>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+<!-- Sounds -->
+
+<!-- Group Stage Congratulations -->
+<audio class='audio-sounds' id="schwifty1" autoplay>
+    <source src="Sounds/Get-Schwifty-1.mp3">
+</audio>
+
+<!-- Semifinals Congratulations -->
+<audio class='audio-sounds' id="schwifty2" autoplay>
+        <source src="Sounds/Get-Schwifty-2.mp3">
+</audio>
+
+<!-- You Win Congratulations -->
+<audio class='audio-sounds' id="schwifty3" autoplay>
+        <source src="Sounds/I_Like_What_You_Got.mp3">
+</audio>
+
+<!-- You Lose -->
+<audio class='audio-sounds' id="schwifty4" autoplay>
+    <source src="Sounds/Disqualified.mp3">
+</audio>
+
+<!-- Home Page Audio -->
+<audio class='audio-sounds' id="schwifty5" autoplay>
+    <source src="Sounds/Theme-Song.mp3">
+</audio>
+
+
+
+
+
+
+
+<script>
+// JavaScript code goes here 
+    
+
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+// Game Board
+let x = canvas.width/2;
+let y = canvas.height-30;
+let x2 = canvas.width/4;
+let y2 = canvas.height-20;
+let x3 = canvas.width/6;
+let y3 = canvas.height-10;
+let dx = 2.5;
+let dy = -2.5;
+let dx2 = 3;
+let dy2 = -3;
+let dx3 = 4;
+let dy3 = -4;
+// Ball Size
+let ballRadius = 10;
+// Paddle Control
+let paddleHeight = 10;
+let paddleWidth = 75;
+let paddleX = (canvas.width - paddleWidth) / 2;
+let rightPressed = false;
+let leftPressed = false;
+// Brick Variables
+let brickRowCount = 3;
+let brickColumnCount = 5;
+let brickWidth = 90;
+let brickHeight = 25;
+let brickPadding = 10;
+let brickOffsetTop = 30;
+let brickOffsetLeft = 40;
+// Score Tracker
+let score = 0;
+// Lives
+let lives = 5;
+// Current level
+let currentLevel = 1;
+// Modal Control
+let modalShowing = false;
+
+
+
+// Close Modals Function
+$(".modal").on("click", ".closeModal", () => {
+    $(".modal").modal("hide");
+    $(document.body).removeClass("modal-open");
+    $(".modal-backdrop").remove();
+    modalShowing = false;
+  })
+
+
+// Close Audio Function
+$("body").on("click", ".closeModal", () => {
+    $('#schwifty1')[0].pause();
+    $('#schwifty2')[0].pause();
+    $('#schwifty3')[0].pause();
+    $('#schwifty4')[0].pause();
+})
+
+
+let bricks = [];
+for(let c = 0; c < brickColumnCount; c++) {
+    bricks[c] = [];
+    //CHANGE FOR EASY TESTING CHANGE BACK TO brickRowCount
+    for(let r = 0; r < brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+    }
+}
+
+let level2Bricks = [];
+for(let c = 0; c < brickColumnCount; c++) {
+    level2Bricks[c] = [];
+    for(let r = 0; r < brickRowCount; r++) {
+        level2Bricks[c][r] = { x: 0, y: 0, status: 1 };
+    }
+}
+
+let level3Bricks = [];
+for(let c = 0; c < brickColumnCount; c++) {
+    level3Bricks[c] = [];
+    for(let r = 0; r < brickRowCount; r++) {
+        level3Bricks[c][r] = { x: 0, y: 0, status: 2 };
+    }
+}
+
+
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
+// Mouse Control Function
+function mouseMoveHandler(e) {
+    let relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth/2;
+    }
+}
+
+// Press Key Functions
+function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+        rightPressed = true;
+    }
+    else if(e.keyCode == 37) {
+        leftPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if(e.keyCode == 39) {
+        rightPressed = false;
+    }
+    else if(e.keyCode == 37) {
+        leftPressed = false;
+    }
+}
+
+// Brick Collision Function
+function collisionDetection() {
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = bricks[c][r];
+            if(b.status == 1){
+                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    dy = -dy;
+                    b.status = 0;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == brickRowCount*brickColumnCount) {
+                        modalShowing = true;
+                        $('#schwifty1')[0].play();
+                        $('.level-1').modal()
+                        currentLevel++;
+                        drawLevel2();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Brick Collision Function Level 2
+function collisionDetectionLevel2() {
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = level2Bricks[c][r];
+            if(b.status == 1){
+                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    dy = -dy;
+                    b.status = 0;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == ((brickRowCount*brickColumnCount)*2)) {
+                        modalShowing = true;
+                        $('#schwifty2')[0].play();
+                        $('.level-2').modal()
+                        currentLevel++
+                        drawLevel3();
+                    }
+                }
+            }
+        }
+    }
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = level2Bricks[c][r];
+            if(b.status == 1){
+                if(x2 > b.x && x2 < b.x+brickWidth && y2 > b.y && y2 < b.y+brickHeight) {
+                    dy2 = -dy2;
+                    b.status = 0;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == ((brickRowCount*brickColumnCount)*2)) {
+                        modalShowing = true;
+                        $('#schwifty2')[0].play();
+                        $('.level-2').modal()
+                        currentLevel++
+                        drawLevel3();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Brick Collision Function Level 3
+function collisionDetectionLevel3() {
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = level3Bricks[c][r];
+            if(b.status > 0){
+                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    dy = -dy;
+                    b.status--;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == ((brickRowCount*brickColumnCount)*4)) {
+                        modalShowing = true;
+                        $('#schwifty3')[0].play();
+                        return $('.youWinModal').modal();
+                        // document.location.reload();
+                    }
+                }
+            }
+        }
+    }
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = level3Bricks[c][r];
+            if(b.status > 0){
+                if(x2 > b.x && x2 < b.x+brickWidth && y2 > b.y && y2 < b.y+brickHeight) {
+                    dy2 = -dy2;
+                    b.status--;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == ((brickRowCount*brickColumnCount)*4)) {
+                        modalShowing = true;
+                        $('#schwifty3')[0].play();
+                        return $('.youWinModal').modal();
+                    }
+                }
+            }
+        }
+    }
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = level3Bricks[c][r];
+            if(b.status > 0){
+                if(x3 > b.x && x3 < b.x+brickWidth && y3 > b.y && y3 < b.y+brickHeight) {
+                    dy3 = -dy3;
+                    b.status--;
+                    score++;
+                    $('.score').text("Score: " + score + " ");
+                    if(score == ((brickRowCount*brickColumnCount)*4)) {
+                        modalShowing = true;
+                        $('#schwifty3')[0].play();
+                        return $('.youWinModal').modal();
+                        // document.location.reload();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Scoreboard Function
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
+}
+
+// Lives Function
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+}
+
+// Create Balls Functions
+
+// Group Stage Ball
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// SemiFinals Ball
+function drawBall2() {
+    ctx.beginPath();
+    ctx.arc(x2, y2, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#FF0000";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Finals Ball
+function drawBall3() {
+    ctx.beginPath();
+    ctx.arc(x3, y3, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#00A500";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Create Paddles
+
+// Group Stage Paddle
+function drawPaddle() {
+    ctx. beginPath();
+    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#000000";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// SemiFinals Paddle
+function drawPaddle2() {
+    ctx. beginPath();
+    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth+20, paddleHeight);
+    ctx.fillStyle = "#000000";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Finals Paddle
+function drawPaddle3() {
+    ctx. beginPath();
+    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth+40, paddleHeight);
+    ctx.fillStyle = "#000000";
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Create Bricks
+
+// Group Stage Bricks
+function drawBricks() {
+    for(let c = 0; c < brickColumnCount; c++) {
+        for(let r = 0; r < brickRowCount; r++) {
+            if(bricks[c][r].status == 1){
+                let brickX = (c * (brickWidth+brickPadding)) + brickOffsetLeft;
+                let brickY = (r * (brickHeight+brickPadding)) + brickOffsetTop;
+                bricks[c][r].x = brickX;
+                bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+                ctx.closePath();
+            } 
+        }
+    }
+}
+
+
+// SemiFinals Bricks
+function drawBricksLevel2() {
+    for(let c = 0; c < brickColumnCount; c++) {
+        for(let r = 0; r < brickRowCount; r++) {
+            if(level2Bricks[c][r].status == 1){
+                let brickX = (c * (brickWidth+brickPadding)) + brickOffsetLeft;
+                let brickY = (r * (brickHeight+brickPadding)) + brickOffsetTop;
+                level2Bricks[c][r].x = brickX;
+                level2Bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+                ctx.closePath();
+            } 
+        }
+    }
+}
+
+
+// Finals Bricks
+function drawBricksLevel3() {
+    for(let c = 0; c < brickColumnCount; c++) {
+        for(let r = 0; r < brickRowCount; r++) {
+            if(level3Bricks[c][r].status == 2){
+                let brickX = (c * (brickWidth+brickPadding)) + brickOffsetLeft;
+                let brickY = (r * (brickHeight+brickPadding)) + brickOffsetTop;
+                level3Bricks[c][r].x = brickX;
+                level3Bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+                ctx.closePath();
+            } 
+            // Turns Bricks Yellow On Level 3
+            if(level3Bricks[c][r].status == 1){
+                let brickX = (c * (brickWidth+brickPadding)) + brickOffsetLeft;
+                let brickY = (r * (brickHeight+brickPadding)) + brickOffsetTop;
+                level3Bricks[c][r].x = brickX;
+                level3Bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "#FFFF00";
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+    }
+}
+
+
+// Draw Levels Functions 
+
+// Group Stage
+function draw() {
+    if(!modalShowing){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    collisionDetection();
+    
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if(y + dy < ballRadius) {
+        dy = -dy;
+    }
+    else if(y + dy > canvas.height-ballRadius) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+  // Paddle Speed When Clicking Arrow Keys  
+    if(rightPressed && paddleX < canvas.width-paddleWidth) {
+        paddleX += 7;
+    }
+    else if(leftPressed && paddleX > 0) {
+        paddleX -= 7;
+    }
+    
+    x += dx;
+    y += dy;
+    }
+        if(currentLevel == 1){
+            requestAnimationFrame(draw);
+        }
+
+}
+
+// SemiFinal Stage
+function drawLevel2() {
+    if(!modalShowing){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricksLevel2();
+    drawBall();
+    drawBall2();
+    drawPaddle2();
+    collisionDetectionLevel2();
+    
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if(y + dy < ballRadius) {
+        dy = -dy;
+    }
+    else if(y + dy > canvas.height-ballRadius) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+    if(x2 + dx2 > canvas.width-ballRadius || x2 + dx2 < ballRadius) {
+        dx2 = -dx2;
+    }
+    if(y2 + dy2 < ballRadius) {
+        dy2 = -dy2;
+    }
+    else if(y2 + dy2 > canvas.height-ballRadius) {
+        if(x2 > paddleX && x2 < paddleX + paddleWidth) {
+            dy2 = -dy2;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x2 = canvas.width/4;
+                y2 = canvas.height-20;
+                dx2 = 4;
+                dy2 = -4;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+
+    if(rightPressed && paddleX < canvas.width-paddleWidth) {
+        paddleX += 7;
+    }
+    else if(leftPressed && paddleX > 0) {
+        paddleX -= 7;
+    }
+    
+    x += dx;
+    y += dy;
+    x2 += dx2;
+    y2 += dy2;
+}
+    if(currentLevel == 2){
+        requestAnimationFrame(drawLevel2);
+    }
+}
+
+
+// Final Stage
+function drawLevel3() {
+    if(!modalShowing){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricksLevel3();
+    drawBall();
+    drawBall2();
+    drawBall3();
+    drawPaddle3();
+    collisionDetectionLevel3();
+    
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if(y + dy < ballRadius) {
+        dy = -dy;
+    }
+    else if(y + dy > canvas.height-ballRadius) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+    if(x2 + dx2 > canvas.width-ballRadius || x2 + dx2 < ballRadius) {
+        dx2 = -dx2;
+    }
+    if(y2 + dy2 < ballRadius) {
+        dy2 = -dy2;
+    }
+    else if(y2 + dy2 > canvas.height-ballRadius) {
+        if(x2 > paddleX && x2 < paddleX + paddleWidth) {
+            dy2 = -dy2;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x2 = canvas.width/4;
+                y2 = canvas.height-20;
+                dx2 = 4;
+                dy2 = -4;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+    if(x3 + dx3 > canvas.width-ballRadius || x3 + dx3 < ballRadius) {
+        dx3 = -dx3;
+    }
+    if(y3 + dy3 < ballRadius) {
+        dy3 = -dy3;
+    }
+    else if(y3 + dy3 > canvas.height-ballRadius) {
+        if(x3 > paddleX && x3 < paddleX + paddleWidth) {
+            dy3 = -dy3;
+        }
+        else {
+            lives--;
+            $('.lives').text("Lives: " + lives + "");
+            if(!lives) {
+                $('#schwifty4')[0].play();
+                return $('.youLoseModal').modal();
+                // document.location.reload();
+            }
+            else {
+                x3 = canvas.width/6;
+                y3 = canvas.height-10;
+                dx3 = 6;
+                dy3 = -6;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+    
+    if(rightPressed && paddleX < canvas.width-paddleWidth) {
+        paddleX += 7;
+    }
+    else if(leftPressed && paddleX > 0) {
+        paddleX -= 7;
+    }
+    
+    x += dx;
+    y += dy;
+    x2 += dx2;
+    y2 += dy2;
+    x3 += dx3;
+    y3 += dy3;
+}
+    if(currentLevel == 3) {
+        requestAnimationFrame(drawLevel3);
+    }
+}
+
+
+
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="js/app.js"></script> 
+
+</body>
+</html>
